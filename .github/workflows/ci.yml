@@ -16,23 +16,27 @@ jobs:
         service: [service1, service2]
 
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v3
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-      with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+      - name: Decode GCP service account key
+        run: |
+          echo "${{ secrets.GCP_SA_KEY }}" | base64 -d > "${{ github.workspace }}/gcp-key.json"
 
-    - name: Authenticate Docker to Artifact Registry
-      run: |
-        gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          service_account_key: ${{ github.workspace }}/gcp-key.json
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Build Docker image
-      run: |
-        docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest ./${{ matrix.service }}
+      - name: Authenticate Docker to Artifact Registry
+        run: |
+          gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
 
-    - name: Push Docker image to Artifact Registry
-      run: |
-        docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest
+      - name: Build Docker image
+        run: |
+          docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest ./${{ matrix.service }}
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest
