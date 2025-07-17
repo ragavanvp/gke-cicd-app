@@ -5,16 +5,15 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: psychic-etching-466000-n9           # GCP project ID
-  GAR_REGION: us-central1                # Artifact Registry region (e.g., asia-south1)
-  GAR_REPO: my-docker-repo               # Artifact Registry repo name
+  GAR_REGION: us-central1                # ✅ Use region-specific Artifact Registry
+  GAR_REPO: my-docker-repo               # ✅ Artifact Registry repo name
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [service1, service2]     # 🧩 Define your services here
+        service: [service1, service2]    # ✅ Define all microservices here
 
     steps:
     - name: Checkout Code
@@ -32,10 +31,12 @@ jobs:
       run: |
         gcloud auth configure-docker ${{ env.GAR_REGION }}-docker.pkg.dev --quiet
 
-    - name: Build Docker Image for ${{ matrix.service }}
+    - name: Build Docker Image - ${{ matrix.service }}
       run: |
-        docker build -t ${{ env.GAR_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/${{ matrix.service }}:latest ./${{ matrix.service }}
+        docker build \
+          -t ${{ env.GAR_REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.GAR_REPO }}/${{ matrix.service }}:latest \
+          ./${{ matrix.service }}
 
-    - name: Push Docker Image for ${{ matrix.service }}
+    - name: Push Docker Image - ${{ matrix.service }}
       run: |
-        docker push ${{ env.GAR_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO }}/${{ matrix.service }}:latest
+        docker push ${{ env.GAR_REGION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ env.GAR_REPO }}/${{ matrix.service }}:latest
