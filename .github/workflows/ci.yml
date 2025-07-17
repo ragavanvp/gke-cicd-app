@@ -33,8 +33,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest ./${{ matrix.service }}
+          docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/service1:latest ./service1
 
       - name: Push Docker image to Artifact Registry
         run: |
-          docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/${{ matrix.service }}:latest
+          docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-docker-repo/service1:latest
