@@ -1,0 +1,4 @@
+resources:
+  - ../../apps/prod/service1
+  - ../../apps/prod/service2
+  - ../../mongo
