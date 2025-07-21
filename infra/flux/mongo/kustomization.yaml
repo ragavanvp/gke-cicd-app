@@ -1,3 +1,4 @@
 resources:
+  - helm-repo.yaml
   - helmrelease.yaml
-  - values.yaml
+
