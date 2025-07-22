@@ -1,5 +1,0 @@
-auth:
-  rootPassword: root123
-  username: myuser
-  password: mypass
-  database: mydb

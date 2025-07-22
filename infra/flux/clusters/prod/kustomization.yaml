@@ -1,4 +1,0 @@
-resources:
-  - service1-kustomization.yaml
-  - service2-kustomization.yaml
-  - mongo-kustomization.yaml
