@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: service1
+  namespace: default
   labels:
     app: service1
 spec:
@@ -15,8 +16,7 @@ spec:
         app: service1
     spec:
       containers:
-        - name: service1
-          image: nginx:1.25.3
-          ports:
-            - containerPort: 80
-
+      - name: service1
+        image: nginx:1.25.3
+        ports:
+        - containerPort: 80

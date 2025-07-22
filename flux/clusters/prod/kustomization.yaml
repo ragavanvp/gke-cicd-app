@@ -1,15 +1,14 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: prod-apps
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./flux/workloads
+  path: "./flux/workloads"       # points to folder containing service1, service2 kustomizations
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-system          # This must match your GitRepository name
-    namespace: flux-system
-  targetNamespace: default     # where your apps will deploy
-  timeout: 2m
+    name: flux-system
+  validation: client
+  targetNamespace: default
